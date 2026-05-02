@@ -367,9 +367,14 @@ function fmtSecondary(amount,cur){
 function dbLoad(){
   try{
     const raw = localStorage.getItem(STORAGE_KEY);
-    transactions = raw ? JSON.parse(raw) : SEED;
-  } catch { transactions = SEED; }
-  if(!transactions||transactions.length===0) transactions=[...SEED];
+    if(raw !== null){
+      // Key exists — user has used the app before, respect their data (even if empty)
+      transactions = JSON.parse(raw) || [];
+    } else {
+      // First time ever opening the app — load seed data
+      transactions = [...SEED];
+    }
+  } catch { transactions = [...SEED]; }
 }
 
 function dbSave(){
