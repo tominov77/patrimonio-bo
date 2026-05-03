@@ -1,22 +1,26 @@
 <!DOCTYPE html>
-<!-- saved from url=(0048)file:///C:/Users/GERENCIA/Downloads/index_3.html -->
-<html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#080a0f">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Patrimonio">
-  <meta name="description" content="Control de finanzas personales con tipo de cambio BCB">
-  <link rel="manifest" href="file:///C:/Users/GERENCIA/Downloads/manifest.json">
-  <link rel="apple-touch-icon" href="file:///C:/Users/GERENCIA/Downloads/icon-192.png">
+
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <meta name="theme-color" content="#080a0f"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="Patrimonio"/>
+  <meta name="description" content="Control de finanzas personales con tipo de cambio BCB"/>
+  <link rel="manifest" href="./manifest.json"/>
+  <link rel="apple-touch-icon" href="./icon-192.png"/>
   <title>Patrimonio · Bolivia</title>
 
   <!-- SheetJS for Excel export -->
-  <script src="./index_files/xlsx.full.min.js.descarga"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
   <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com/">
-  <link href="./index_files/css2" rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
 
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -204,11 +208,43 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'IBM Pl
 .install-btn:active{background:var(--gold);color:var(--bg)}
 .install-close{background:none;border:none;color:var(--textd);cursor:pointer;font-size:1.1rem;padding:2px;-webkit-appearance:none}
 
+
+/* ── Import tab ── */
+.import-card{background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:14px}
+.import-title{font-size:.57rem;letter-spacing:2px;text-transform:uppercase;color:var(--textd);margin-bottom:6px}
+.import-desc{font-size:.68rem;color:var(--textm);line-height:1.6;margin-bottom:14px}
+.drop-zone{border:2px dashed var(--border2);border-radius:10px;padding:28px 16px;text-align:center;cursor:pointer;transition:all .2s;position:relative}
+.drop-zone:active,.drop-zone.drag{border-color:var(--gold2);background:rgba(212,168,71,.04)}
+.drop-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.drop-icon{font-size:2rem;margin-bottom:8px}
+.drop-lbl{font-size:.7rem;color:var(--textm)}
+.drop-sub{font-size:.58rem;color:var(--textd);margin-top:4px}
+.parse-result{margin-top:14px}
+.parse-summary{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.parse-badge{padding:5px 12px;border-radius:20px;font-size:.6rem;letter-spacing:.8px;border:1px solid var(--border)}
+.parse-badge.found{border-color:var(--green2);color:var(--green)}
+.parse-badge.skip{border-color:var(--textd);color:var(--textd)}
+.parse-badge.dup{border-color:var(--gold2);color:var(--gold)}
+.preview-list{display:flex;flex-direction:column;gap:5px;max-height:340px;overflow-y:auto;margin-bottom:14px}
+.prev-item{display:flex;align-items:center;gap:9px;background:var(--s0);border:1px solid var(--border);border-radius:8px;padding:9px 11px}
+.prev-item.dup{opacity:.45}
+.prev-check{width:18px;height:18px;accent-color:var(--gold);flex-shrink:0;cursor:pointer}
+.prev-info{flex:1;min-width:0}
+.prev-desc{font-size:.73rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prev-meta{font-size:.53rem;color:var(--textd);margin-top:2px}
+.prev-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
+.prev-amt{font-family:'Playfair Display',serif;font-size:.85rem;color:var(--red)}
+.prev-cat{background:var(--s1);border:1px solid var(--border);border-radius:5px;font-family:'IBM Plex Mono',monospace;font-size:.55rem;color:var(--textm);padding:3px 6px;cursor:pointer;-webkit-appearance:none;max-width:120px}
+.import-btn{width:100%;padding:12px;border:none;border-radius:9px;background:var(--cyan2);color:var(--cyan);font-family:'IBM Plex Mono',monospace;font-size:.65rem;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s;-webkit-appearance:none}
+.import-btn:active{background:var(--cyan);color:var(--bg)}
+.import-btn:disabled{opacity:.4;cursor:default}
+.dup-tag{font-size:.5rem;color:var(--gold);border:1px solid var(--gold2);border-radius:4px;padding:1px 5px;margin-left:4px;vertical-align:middle}
 @media(min-width:560px){
   .hdr{flex-direction:row;align-items:flex-start}
   .hdr-row1{flex-direction:column;align-items:flex-start}
 }
 </style>
+
 </head>
 <body>
 
@@ -228,23 +264,15 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'IBM Pl
           <div class="fx-label">Tipo de cambio BCB</div>
           <button class="fx-reload" id="fxReload" title="Actualizar">↻</button>
         </div>
-        <div id="fxContent">
-    <div class="fx-rates">
-      <div class="fx-rate"><span>COMPRA</span><span>Bs 9.54</span></div>
-      <div class="fx-rate"><span>VENTA</span><span>Bs 9.74</span></div>
-    </div>
-    <div class="fx-note">
-      ⚠ Valor referencial estimado · 
-      <a href="https://www.bcb.gob.bo/librerias/indicadores/otras/ultimo.php" target="_blank" rel="noreferrer">bcb.gob.bo</a>
-    </div></div>
+        <div id="fxContent"><div class="loading">Consultando BCB…</div></div>
       </div>
       <div class="toolbar">
         <button class="tbtn" id="btnExport">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           Exportar Excel
         </button>
         <button class="tbtn danger" id="btnClear">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14H6L5 6"></path><path d="M10 11v6M14 11v6"></path><path d="M9 6V4h6v2"></path></svg>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
           Limpiar BD
         </button>
       </div>
@@ -252,6 +280,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'IBM Pl
   </div>
 
   <!-- Install banner -->
+
   <div class="install-banner" id="installBanner">
     <p><strong>Instalá la app</strong> en tu pantalla de inicio para acceso sin internet.</p>
     <button class="install-btn" id="installBtn">Instalar</button>
@@ -259,96 +288,70 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'IBM Pl
   </div>
 
   <!-- Currency toggle -->
+
   <div class="cur-wrap">
     <div class="cur-toggle">
-      <button class="cur-btn active" id="curBs" onclick="setCurrency(&#39;bs&#39;)">Bs</button>
-      <button class="cur-btn" id="curUsd" onclick="setCurrency(&#39;usd&#39;)">USD</button>
+      <button class="cur-btn active" id="curBs" onclick="setCurrency('bs')">Bs</button>
+      <button class="cur-btn" id="curUsd" onclick="setCurrency('usd')">USD</button>
     </div>
   </div>
 
   <!-- Net worth hero -->
+
   <div class="net-hero">
     <div class="nh-label">Patrimonio neto</div>
-    <div class="nh-amount pos" id="heroAmount">Bs 645.100,00</div>
-    <div class="nh-sub" id="heroSub">Activos − Pasivos · Bolivianos</div>
+    <div class="nh-amount pos" id="heroAmount">—</div>
+    <div class="nh-sub" id="heroSub">Activos − Pasivos</div>
     <div class="nb-grid">
-      <div class="nb-card"><div class="nb-lbl asset">Activos</div><div class="nb-val asset" id="heroAssets">Bs 791.200,00</div></div>
-      <div class="nb-card"><div class="nb-lbl debt">Deudas</div><div class="nb-val debt" id="heroDebts">Bs 146.100,00</div></div>
-      <div class="nb-card"><div class="nb-lbl cf">Flujo mes</div><div class="nb-val gpos" id="heroCF">Bs 6.250,00</div></div>
+      <div class="nb-card"><div class="nb-lbl asset">Activos</div><div class="nb-val asset" id="heroAssets">—</div></div>
+      <div class="nb-card"><div class="nb-lbl debt">Deudas</div><div class="nb-val debt" id="heroDebts">—</div></div>
+      <div class="nb-card"><div class="nb-lbl cf">Flujo mes</div><div class="nb-val gpos" id="heroCF">—</div></div>
     </div>
   </div>
 
   <!-- Summary -->
+
   <div class="sum-grid">
-    <div class="sum-card"><div class="sc-lbl">Ingresos</div><div class="sc-amt income" id="sumIncome">Bs 8.500,00</div><div class="sc-sub" id="sumIncomeSub">1 registro</div></div>
-    <div class="sum-card"><div class="sc-lbl">Gastos</div><div class="sc-amt expense" id="sumExpense">Bs 2.250,00</div><div class="sc-sub" id="sumExpenseSub">2 registros</div></div>
+    <div class="sum-card"><div class="sc-lbl">Ingresos</div><div class="sc-amt income" id="sumIncome">—</div><div class="sc-sub" id="sumIncomeSub"></div></div>
+    <div class="sum-card"><div class="sc-lbl">Gastos</div><div class="sc-amt expense" id="sumExpense">—</div><div class="sc-sub" id="sumExpenseSub"></div></div>
   </div>
 
   <!-- Content (tabs) -->
-  <div id="content">
-  <div class="form-card">
-    <div class="form-title">Nueva entrada</div>
-    <div class="type-toggle">
-      <button class="type-btn income on" onclick="setFormType(&#39;income&#39;)">Ingreso</button><button class="type-btn expense" onclick="setFormType(&#39;expense&#39;)">Gasto</button><button class="type-btn asset" onclick="setFormType(&#39;asset&#39;)">Activo</button><button class="type-btn debt" onclick="setFormType(&#39;debt&#39;)">Deuda</button>
-    </div>
-    <div class="fgrid">
-      <div class="fg full">
-        <label>Descripción</label>
-        <input type="text" id="fDesc" placeholder="Descripción" value="" oninput="form.description=this.value" onkeydown="if(event.key===&#39;Enter&#39;)submitForm()">
-      </div>
-      <div class="fg">
-        <label>Monto</label>
-        <input type="number" id="fAmt" inputmode="decimal" placeholder="0.00" value="" oninput="form.amount=this.value;renderContent()">
-      </div>
-      <div class="fg">
-        <label>Moneda</label>
-        <select id="fCur" onchange="form.currency=this.value;renderContent()">
-          <option value="bs" selected="">Bolivianos (Bs)</option>
-          <option value="usd">Dólares (USD)</option>
-        </select>
-      </div>
-      
-      <div class="fg">
-        <label>Fecha</label>
-        <input type="date" id="fDate" value="2026-05-02" onchange="form.date=this.value">
-      </div>
-      <div class="fg">
-        <label>Categoría</label>
-        <select id="fCat" onchange="form.category=this.value">
-          <option selected="">Salario</option><option>Freelance</option><option>Inversiones</option><option>Negocio</option><option>Dividendos</option><option>Otro</option>
-        </select>
-      </div>
-    </div>
-    <button class="submit-btn income" onclick="submitForm()">
-      Registrar ingreso
-    </button>
-  </div></div>
+
+  <div id="content"></div>
 </div>
 
 <!-- Bottom nav -->
+
 <nav class="bottom-nav">
-  <button class="bnav-btn active" id="nav-add" onclick="setTab(&#39;add&#39;)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+  <button class="bnav-btn active" id="nav-add" onclick="setTab('add')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
     Agregar<div class="dot"></div>
   </button>
-  <button class="bnav-btn" id="nav-history" onclick="setTab(&#39;history&#39;)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"></path><rect x="9" y="3" width="6" height="4" rx="1"></rect><line x1="9" y1="12" x2="15" y2="12"></line><line x1="9" y1="16" x2="12" y2="16"></line></svg>
+  <button class="bnav-btn" id="nav-history" onclick="setTab('history')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="12" y2="16"/></svg>
     Historial<div class="dot"></div>
   </button>
-  <button class="bnav-btn" id="nav-patrimony" onclick="setTab(&#39;patrimony&#39;)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+  <button class="bnav-btn" id="nav-patrimony" onclick="setTab('patrimony')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
     Patrimonio<div class="dot"></div>
   </button>
-  <button class="bnav-btn" id="nav-charts" onclick="setTab(&#39;charts&#39;)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+  <button class="bnav-btn" id="nav-charts" onclick="setTab('charts')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
     Análisis<div class="dot"></div>
+  </button>
+  <button class="bnav-btn" id="nav-import" onclick="setTab('import')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+    Importar<div class="dot"></div>
   </button>
 </nav>
 
 <!-- Toast -->
+
 <div class="toast" id="toast"></div>
 
 <!-- Modal -->
+
 <div class="overlay" id="overlay" style="display:none" onclick="closeModal()">
   <div class="modal" onclick="event.stopPropagation()">
     <h3 id="modalTitle">Confirmar</h3>
@@ -504,7 +507,7 @@ function setCurrency(c){
 // ─── Tabs ─────────────────────────────────────────────────────────────────────
 function setTab(t){
   tab=t;
-  ['add','history','patrimony','charts'].forEach(k=>{
+  ['add','history','patrimony','charts','import'].forEach(k=>{
     document.getElementById('nav-'+k)?.classList.toggle('active',k===t);
   });
   renderContent();
@@ -838,61 +841,213 @@ function exportExcel(){
   showToast('Excel descargado: '+fname);
 }
 
-// ─── Render ───────────────────────────────────────────────────────────────────
-function renderContent(){
+
+// ─── BNB Extrato Importer ─────────────────────────────────────────────────────
+let importedRows = [];
+let importChecked = {};
+
+const AUTO_CAT = [
+  [/pedidosya|burger|pizza|pollo|kfc|subway|cafe|larome|crepa|delicias|brasargent|wabi|aviator/i, 'Alimentación'],
+  [/fidalga|hipermaxi|orsa|supermercado|mercado/i, 'Alimentación'],
+  [/farmac|odonto|medic|dental/i, 'Salud'],
+  [/intpetrol|gasolina|petrol|combustib/i, 'Transporte'],
+  [/netflix|spotify|apple|google|disney|youtube|amazon/i, 'Entretenimiento'],
+  [/telecel|tigo|entel|viva|internet|payment home/i, 'Servicios'],
+  [/wisey|udemy|coursera|educac/i, 'Educación'],
+  [/boa|amaszonas|vuelo|aerolinea/i, 'Transporte'],
+  [/premier|fitness|gym/i, 'Salud'],
+  [/seguro|libelula|alianza/i, 'Servicios'],
+  [/mantenimiento|cargo|comision|exceso|fondos insuf/i, 'Servicios'],
+];
+
+function autoCategory(desc){
+  for(const [re,cat] of AUTO_CAT){ if(re.test(desc)) return cat; }
+  return 'Otro';
+}
+
+function parseBNBExtract(text){
+  const lines = text.split('\n').map(l=>l.trim()).filter(Boolean);
+  const results = [];
+  const reConsume = /^(\d{2}\/\d{2}\/\d{4})\s+(.+?)\s+-\s+Consumos\s+\d+\/\d+\s+(BO\$|U\$S)\s+[\d,.]+\s+([\d,.]+)/;
+  const reCharge  = /^(\d{2}\/\d{2}\/\d{4})\s+(Cargo[^0-9]+|Seguro[^0-9]+|Mantenimiento[^0-9]+)([\d,.]+)$/;
+  for(const line of lines){
+    let m;
+    m = line.match(reConsume);
+    if(m){
+      const [,dateRaw,desc,moneda,,chargeRaw] = m;
+      const amount = parseFloat(chargeRaw.replace(/,/g,''));
+      if(!amount||amount<=0) continue;
+      const cur = moneda==='U$S'?'usd':'bs';
+      const [d,mo,y] = dateRaw.split('/');
+      results.push({desc:desc.trim(), date:`${y}-${mo}-${d}`, amount, currency:cur, category:autoCategory(desc)});
+      continue;
+    }
+    m = line.match(reCharge);
+    if(m){
+      const [,dateRaw,desc,amtRaw] = m;
+      const amount = parseFloat(amtRaw.replace(/,/g,''));
+      if(!amount||amount<=0) continue;
+      const [d,mo,y] = dateRaw.split('/');
+      results.push({desc:desc.trim(), date:`${y}-${mo}-${d}`, amount, currency:'bs', category:'Servicios'});
+    }
+  }
+  return results;
+}
+
+function isDuplicate(row){
+  return transactions.some(t=>
+    t.type==='expense' &&
+    Math.abs(t.amount-row.amount)<0.01 &&
+    t.currency===row.currency &&
+    t.date===row.date &&
+    t.description.substring(0,12)===row.desc.substring(0,12)
+  );
+}
+
+function renderImportTab(){
   const el=document.getElementById('content');
   if(!el) return;
-  if(tab==='add')       el.innerHTML=renderForm();
-  else if(tab==='history')   el.innerHTML=renderHistory();
-  else if(tab==='patrimony') el.innerHTML=renderPatrimony();
-  else if(tab==='charts')    el.innerHTML=renderCharts();
+  const dupCount=importedRows.filter(r=>r._dup).length;
+  const checkedCount=Object.values(importChecked).filter(Boolean).length;
+  let previewHtml='';
+  if(importedRows.length>0){
+    previewHtml=`
+    <div class="parse-result">
+      <div class="parse-summary">
+        <span class="parse-badge found">${importedRows.length} transacciones detectadas</span>
+        ${dupCount>0?`<span class="parse-badge dup">${dupCount} posibles duplicados</span>`:''}
+        <span class="parse-badge skip">${checkedCount} seleccionadas</span>
+      </div>
+      <div class="preview-list">
+        ${importedRows.map((r,i)=>{
+          const chk=importChecked[i]!==false&&!r._dup;
+          return `
+          <div class="prev-item${r._dup?' dup':''}">
+            <input type="checkbox" class="prev-check" ${chk&&!r._dup?'checked':''} ${r._dup?'disabled':''}
+              onchange="importChecked[${i}]=this.checked;renderImportTab();document.getElementById('extractCache').value=document.getElementById('extractText')?document.getElementById('extractText').value:''"/>
+            <div class="prev-info">
+              <div class="prev-desc">${esc(r.desc)}${r._dup?'<span class="dup-tag">duplicado</span>':''}</div>
+              <div class="prev-meta">${r.date} · ${r.currency.toUpperCase()}</div>
+            </div>
+            <div class="prev-right">
+              <div class="prev-amt">-${r.currency==='usd'?fmtUSD(r.amount):fmtBs(r.amount)}</div>
+              <select class="prev-cat" onchange="importedRows[${i}].category=this.value">
+                ${CAT.expense.map(c=>`<option${c===r.category?' selected':''}>${esc(c)}</option>`).join('')}
+              </select>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+      <button class="import-btn" ${checkedCount===0?'disabled':''} onclick="confirmImport()">
+        Importar ${checkedCount} gasto${checkedCount!==1?'s':''}
+      </button>
+    </div>`;
+  }
+  const prevText = (typeof _extractCache!=='undefined')?_extractCache:'';
+  el.innerHTML=`
+  <input type="hidden" id="extractCache"/>
+  <div class="import-card">
+    <div class="import-title">Importar extracto BNB</div>
+    <div class="import-desc">Copiá el texto de tu extracto PDF del BNB y pegalo abajo. La app detecta los consumos, los categoriza automáticamente y te muestra una vista previa para revisar antes de importar.</div>
+    <textarea id="extractText" placeholder="Pegá aquí el texto del extracto BNB..."
+      style="width:100%;height:130px;background:var(--s0);border:1px solid var(--border);border-radius:8px;padding:10px;color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:.73rem;resize:vertical;outline:none;line-height:1.5"
+    >${esc(prevText)}</textarea>
+
+```
+<button class="import-btn" style="margin-top:10px" onclick="onExtractInput(document.getElementById('extractText').value)">
+  Analizar extracto
+</button>
+```
+
+  </div>
+  ${previewHtml}`;
+}
+
+let _extractCache=’’;
+
+function onExtractInput(text){
+if(!text||text.trim().length<20){ showToast(‘Pegá el texto del extracto primero’); return; }
+_extractCache=text;
+const rows=parseBNBExtract(text);
+if(rows.length===0){ showToast(‘No se encontraron consumos — verificá el texto copiado’); return; }
+importedRows=rows.map(r=>({…r,_dup:isDuplicate(r)}));
+importChecked={};
+importedRows.forEach((r,i)=>{ importChecked[i]=!r._dup; });
+renderImportTab();
+}
+
+function confirmImport(){
+const toImport=importedRows.filter((_,i)=>importChecked[i]);
+if(toImport.length===0) return;
+const newTx=toImport.map(r=>({
+id:‘imp-’+Date.now()+’-’+Math.random().toString(36).slice(2,6),
+type:‘expense’, description:r.desc, amount:r.amount,
+currency:r.currency, category:r.category, date:r.date,
+}));
+transactions.unshift(…newTx);
+dbSave();
+importedRows=[]; importChecked={}; _extractCache=’’;
+renderAll();
+showToast(`${newTx.length} gasto${newTx.length!==1?'s':''} importado${newTx.length!==1?'s':''} ✓`);
+setTab(‘history’);
+}
+
+// ─── Render ───────────────────────────────────────────────────────────────────
+function renderContent(){
+const el=document.getElementById(‘content’);
+if(!el) return;
+if(tab===‘add’)       el.innerHTML=renderForm();
+else if(tab===‘history’)   el.innerHTML=renderHistory();
+else if(tab===‘patrimony’) el.innerHTML=renderPatrimony();
+else if(tab===‘charts’)    el.innerHTML=renderCharts();
+else if(tab===‘import’)    renderImportTab();
 }
 
 function renderAll(){
-  renderSummary();
-  renderContent();
+renderSummary();
+renderContent();
 }
 
 // ─── PWA Install ──────────────────────────────────────────────────────────────
-window.addEventListener('beforeinstallprompt', e=>{
-  e.preventDefault();
-  deferredPrompt=e;
-  const banner=document.getElementById('installBanner');
-  if(banner) banner.classList.add('visible');
+window.addEventListener(‘beforeinstallprompt’, e=>{
+e.preventDefault();
+deferredPrompt=e;
+const banner=document.getElementById(‘installBanner’);
+if(banner) banner.classList.add(‘visible’);
 });
 
-document.getElementById('installBtn')?.addEventListener('click',async()=>{
-  if(!deferredPrompt) return;
-  deferredPrompt.prompt();
-  const {outcome}=await deferredPrompt.userChoice;
-  if(outcome==='accepted') showToast('¡App instalada! Buscá el ícono en tu pantalla');
-  deferredPrompt=null;
-  document.getElementById('installBanner')?.classList.remove('visible');
+document.getElementById(‘installBtn’)?.addEventListener(‘click’,async()=>{
+if(!deferredPrompt) return;
+deferredPrompt.prompt();
+const {outcome}=await deferredPrompt.userChoice;
+if(outcome===‘accepted’) showToast(’¡App instalada! Buscá el ícono en tu pantalla’);
+deferredPrompt=null;
+document.getElementById(‘installBanner’)?.classList.remove(‘visible’);
 });
 
-document.getElementById('installClose')?.addEventListener('click',()=>{
-  document.getElementById('installBanner')?.classList.remove('visible');
+document.getElementById(‘installClose’)?.addEventListener(‘click’,()=>{
+document.getElementById(‘installBanner’)?.classList.remove(‘visible’);
 });
 
-window.addEventListener('appinstalled',()=>{
-  document.getElementById('installBanner')?.classList.remove('visible');
-  showToast('App instalada correctamente ✓');
+window.addEventListener(‘appinstalled’,()=>{
+document.getElementById(‘installBanner’)?.classList.remove(‘visible’);
+showToast(‘App instalada correctamente ✓’);
 });
 
 // ─── Service Worker ───────────────────────────────────────────────────────────
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('./sw.js').catch(()=>{});
+if(‘serviceWorker’ in navigator){
+navigator.serviceWorker.register(’./sw.js’).catch(()=>{});
 }
 
 // ─── Wire up buttons ──────────────────────────────────────────────────────────
-document.getElementById('fxReload')?.addEventListener('click', fetchRate);
-document.getElementById('btnExport')?.addEventListener('click', exportExcel);
-document.getElementById('btnClear')?.addEventListener('click',()=>{
-  openModal('¿Eliminar TODOS los registros? Esta acción no se puede deshacer.',()=>{
-    transactions=[];
-    dbSave(); renderAll();
-    showToast('Base de datos limpiada');
-  });
+document.getElementById(‘fxReload’)?.addEventListener(‘click’, fetchRate);
+document.getElementById(‘btnExport’)?.addEventListener(‘click’, exportExcel);
+document.getElementById(‘btnClear’)?.addEventListener(‘click’,()=>{
+openModal(’¿Eliminar TODOS los registros? Esta acción no se puede deshacer.’,()=>{
+transactions=[];
+dbSave(); renderAll();
+showToast(‘Base de datos limpiada’);
+});
 });
 
 // ─── Boot ─────────────────────────────────────────────────────────────────────
@@ -901,5 +1056,5 @@ renderAll();
 fetchRate();
 </script>
 
-
-</body></html>
+</body>
+</html>
