@@ -1,22 +1,24 @@
 <!DOCTYPE html>
-<!-- saved from url=(0048)file:///C:/Users/GERENCIA/Downloads/index_3.html -->
-<html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#080a0f">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Patrimonio">
-  <meta name="description" content="Control de finanzas personales con tipo de cambio BCB">
-  <link rel="manifest" href="file:///C:/Users/GERENCIA/Downloads/manifest.json">
-  <link rel="apple-touch-icon" href="file:///C:/Users/GERENCIA/Downloads/icon-192.png">
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <meta name="theme-color" content="#080a0f"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="Patrimonio"/>
+  <meta name="description" content="Control de finanzas personales con tipo de cambio BCB"/>
+  <link rel="manifest" href="./manifest.json"/>
+  <link rel="apple-touch-icon" href="./icon-192.png"/>
+  <link rel="apple-touch-icon" sizes="192x192" href="./icon-192.png"/>
+  <link rel="apple-touch-icon" sizes="512x512" href="./icon-512.png"/>
   <title>Patrimonio · Bolivia</title>
 
   <!-- SheetJS for Excel export -->
-  <script src="./index_files/xlsx.full.min.js.descarga"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com/">
-  <link href="./index_files/css2" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
 
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -259,23 +261,15 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'IBM Pl
           <div class="fx-label">Tipo de cambio BCB</div>
           <button class="fx-reload" id="fxReload" title="Actualizar">↻</button>
         </div>
-        <div id="fxContent">
-    <div class="fx-rates">
-      <div class="fx-rate"><span>COMPRA</span><span>Bs 9.54</span></div>
-      <div class="fx-rate"><span>VENTA</span><span>Bs 9.74</span></div>
-    </div>
-    <div class="fx-note">
-      ⚠ Valor referencial estimado · 
-      <a href="https://www.bcb.gob.bo/librerias/indicadores/otras/ultimo.php" target="_blank" rel="noreferrer">bcb.gob.bo</a>
-    </div></div>
+        <div id="fxContent"><div class="loading">Consultando BCB…</div></div>
       </div>
       <div class="toolbar">
         <button class="tbtn" id="btnExport">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           Exportar Excel
         </button>
         <button class="tbtn danger" id="btnClear">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14H6L5 6"></path><path d="M10 11v6M14 11v6"></path><path d="M9 6V4h6v2"></path></svg>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
           Limpiar BD
         </button>
       </div>
@@ -292,90 +286,53 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'IBM Pl
   <!-- Currency toggle -->
   <div class="cur-wrap">
     <div class="cur-toggle">
-      <button class="cur-btn active" id="curBs" onclick="setCurrency(&#39;bs&#39;)">Bs</button>
-      <button class="cur-btn" id="curUsd" onclick="setCurrency(&#39;usd&#39;)">USD</button>
+      <button class="cur-btn active" id="curBs" onclick="setCurrency('bs')">Bs</button>
+      <button class="cur-btn" id="curUsd" onclick="setCurrency('usd')">USD</button>
     </div>
   </div>
 
   <!-- Net worth hero -->
   <div class="net-hero">
     <div class="nh-label">Patrimonio neto</div>
-    <div class="nh-amount pos" id="heroAmount">Bs 0,00</div>
-    <div class="nh-sub" id="heroSub">Activos − Pasivos · Bolivianos</div>
+    <div class="nh-amount pos" id="heroAmount">—</div>
+    <div class="nh-sub" id="heroSub">Activos − Pasivos</div>
     <div class="nb-grid">
-      <div class="nb-card"><div class="nb-lbl asset">Activos</div><div class="nb-val asset" id="heroAssets">Bs 0,00</div></div>
-      <div class="nb-card"><div class="nb-lbl debt">Deudas</div><div class="nb-val debt" id="heroDebts">Bs 0,00</div></div>
-      <div class="nb-card"><div class="nb-lbl cf">Flujo mes</div><div class="nb-val gneg" id="heroCF">Bs -200,00</div></div>
+      <div class="nb-card"><div class="nb-lbl asset">Activos</div><div class="nb-val asset" id="heroAssets">—</div></div>
+      <div class="nb-card"><div class="nb-lbl debt">Deudas</div><div class="nb-val debt" id="heroDebts">—</div></div>
+      <div class="nb-card"><div class="nb-lbl cf">Flujo mes</div><div class="nb-val gpos" id="heroCF">—</div></div>
     </div>
   </div>
 
   <!-- Summary -->
   <div class="sum-grid">
-    <div class="sum-card"><div class="sc-lbl">Ingresos</div><div class="sc-amt income" id="sumIncome">Bs 0,00</div><div class="sc-sub" id="sumIncomeSub">0 registros</div></div>
-    <div class="sum-card"><div class="sc-lbl">Gastos</div><div class="sc-amt expense" id="sumExpense">Bs 200,00</div><div class="sc-sub" id="sumExpenseSub">1 registro</div></div>
+    <div class="sum-card"><div class="sc-lbl">Ingresos</div><div class="sc-amt income" id="sumIncome">—</div><div class="sc-sub" id="sumIncomeSub"></div></div>
+    <div class="sum-card"><div class="sc-lbl">Gastos</div><div class="sc-amt expense" id="sumExpense">—</div><div class="sc-sub" id="sumExpenseSub"></div></div>
   </div>
 
   <!-- Content (tabs) -->
-  <div id="content">
-  <div class="form-card">
-    <div class="form-title">Nueva entrada</div>
-    <div class="type-toggle">
-      <button class="type-btn income on" onclick="setFormType(&#39;income&#39;)">Ingreso</button><button class="type-btn expense" onclick="setFormType(&#39;expense&#39;)">Gasto</button><button class="type-btn asset" onclick="setFormType(&#39;asset&#39;)">Activo</button><button class="type-btn debt" onclick="setFormType(&#39;debt&#39;)">Deuda</button>
-    </div>
-    <div class="fgrid">
-      <div class="fg full">
-        <label>Descripción</label>
-        <input type="text" id="fDesc" placeholder="Descripción" value="" oninput="form.description=this.value" onkeydown="if(event.key===&#39;Enter&#39;)submitForm()">
-      </div>
-      <div class="fg">
-        <label>Monto</label>
-        <input type="number" id="fAmt" inputmode="decimal" placeholder="0.00" value="" oninput="form.amount=this.value;renderContent()">
-      </div>
-      <div class="fg">
-        <label>Moneda</label>
-        <select id="fCur" onchange="form.currency=this.value;renderContent()">
-          <option value="bs" selected="">Bolivianos (Bs)</option>
-          <option value="usd">Dólares (USD)</option>
-        </select>
-      </div>
-      
-      <div class="fg">
-        <label>Fecha</label>
-        <input type="date" id="fDate" value="2026-05-04" onchange="form.date=this.value">
-      </div>
-      <div class="fg">
-        <label>Categoría</label>
-        <select id="fCat" onchange="form.category=this.value">
-          <option selected="">Salario</option><option>Freelance</option><option>Inversiones</option><option>Negocio</option><option>Dividendos</option><option>Otro</option>
-        </select>
-      </div>
-    </div>
-    <button class="submit-btn income" onclick="submitForm()">
-      Registrar ingreso
-    </button>
-  </div></div>
+  <div id="content"></div>
 </div>
 
 <!-- Bottom nav -->
 <nav class="bottom-nav">
-  <button class="bnav-btn active" id="nav-add" onclick="setTab(&#39;add&#39;)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+  <button class="bnav-btn active" id="nav-add" onclick="setTab('add')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
     Agregar<div class="dot"></div>
   </button>
-  <button class="bnav-btn" id="nav-history" onclick="setTab(&#39;history&#39;)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"></path><rect x="9" y="3" width="6" height="4" rx="1"></rect><line x1="9" y1="12" x2="15" y2="12"></line><line x1="9" y1="16" x2="12" y2="16"></line></svg>
+  <button class="bnav-btn" id="nav-history" onclick="setTab('history')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="12" y2="16"/></svg>
     Historial<div class="dot"></div>
   </button>
-  <button class="bnav-btn" id="nav-patrimony" onclick="setTab(&#39;patrimony&#39;)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+  <button class="bnav-btn" id="nav-patrimony" onclick="setTab('patrimony')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
     Patrimonio<div class="dot"></div>
   </button>
-  <button class="bnav-btn" id="nav-charts" onclick="setTab(&#39;charts&#39;)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+  <button class="bnav-btn" id="nav-charts" onclick="setTab('charts')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
     Análisis<div class="dot"></div>
   </button>
-  <button class="bnav-btn" id="nav-import" onclick="setTab(&#39;import&#39;)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+  <button class="bnav-btn" id="nav-import" onclick="setTab('import')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
     Importar<div class="dot"></div>
   </button>
 </nav>
@@ -1118,6 +1075,5 @@ dbLoad();
 renderAll();
 fetchRate();
 </script>
-
-
-</body></html>
+</body>
+</html>
