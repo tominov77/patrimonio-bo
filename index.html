@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0048)file:///C:/Users/GERENCIA/Downloads/index_2.html -->
+<!-- saved from url=(0048)file:///C:/Users/GERENCIA/Downloads/index_3.html -->
 <html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -898,30 +898,65 @@ function autoCategory(desc){
 }
 
 function parseBNBExtract(text){
-  const lines = text.split('\n').map(l=>l.trim()).filter(Boolean);
-  const results = [];
-  const reConsume = /^(\d{2}\/\d{2}\/\d{4})\s+(.+?)\s+-\s+Consumos\s+\d+\/\d+\s+(BO[$]|U[$]S)\s+[\d,.]+\s+([\d,.]+)/;
-  const reCharge  = /^(\d{2}\/\d{2}\/\d{4})\s+(Cargo[^0-9]+|Seguro[^0-9]+|Mantenimiento[^0-9]+)([\d,.]+)$/;
-  for(const line of lines){
-    let m;
-    m = line.match(reConsume);
-    if(m){
-      const [,dateRaw,desc,moneda,,chargeRaw] = m;
-      const amount = parseFloat(chargeRaw.replace(/,/g,''));
-      if(!amount||amount<=0) continue;
-      const cur = moneda==='U$S'?'usd':'bs';
-      const [d,mo,y] = dateRaw.split('/');
-      results.push({desc:desc.trim(), date:`${y}-${mo}-${d}`, amount, currency:cur, category:autoCategory(desc)});
+  var lines = text.split('\n');
+  var results = [];
+  var dateRe = /^\d{2}\/\d{2}\/\d{4}/;
+  
+  for(var i=0; i<lines.length; i++){
+    var line = lines[i].trim();
+    if(!line) continue;
+    
+    // Must start with a date DD/MM/YYYY
+    if(!dateRe.test(line)) continue;
+    
+    // Must contain "- Consumos" to be a transaction
+    if(line.indexOf('- Consumos') === -1){
+      // Check for bank charges (Cargo, Seguro, Mantenimiento)
+      var isCharge = line.indexOf('Cargo') !== -1 || 
+                     line.indexOf('Seguro') !== -1 || 
+                     line.indexOf('Mantenimiento') !== -1;
+      if(isCharge){
+        var parts = line.split(/\s+/);
+        var datePart = parts[0];
+        var amtStr = parts[parts.length-1];
+        var amt = parseFloat(amtStr.replace(',',''));
+        if(!isNaN(amt) && amt > 0){
+          var d = datePart.split('/');
+          var desc = parts.slice(1, parts.length-1).join(' ');
+          results.push({desc:desc, date:d[2]+'-'+d[1]+'-'+d[0], amount:amt, currency:'bs', category:'Servicios'});
+        }
+      }
       continue;
     }
-    m = line.match(reCharge);
-    if(m){
-      const [,dateRaw,desc,amtRaw] = m;
-      const amount = parseFloat(amtRaw.replace(/,/g,''));
-      if(!amount||amount<=0) continue;
-      const [d,mo,y] = dateRaw.split('/');
-      results.push({desc:desc.trim(), date:`${y}-${mo}-${d}`, amount, currency:'bs', category:'Servicios'});
-    }
+    
+    // Split on "- Consumos" to get description
+    var consumosIdx = line.indexOf('- Consumos');
+    var dateStr = line.substring(0, 10).trim();
+    var desc = line.substring(11, consumosIdx).trim();
+    var rest = line.substring(consumosIdx + 10).trim();
+    
+    // rest is like: "1/1 BO$ 105.50 105.50" or "1/1 U$S 9.99 69.63"
+    var parts = rest.split(/\s+/);
+    // parts[0] = "1/1", parts[1] = "BO$" or "U$S", parts[2] = original amount, parts[3] = charged amount
+    if(parts.length < 3) continue;
+    
+    var moneda = parts[1];
+    var cur = (moneda === 'U$S') ? 'usd' : 'bs';
+    // Use the last number (charged amount in Bs)
+    var amtStr = parts[parts.length-1];
+    var amt = parseFloat(amtStr.replace(',',''));
+    if(isNaN(amt) || amt <= 0) continue;
+    
+    var d = dateStr.split('/');
+    if(d.length !== 3) continue;
+    
+    results.push({
+      desc: desc,
+      date: d[2]+'-'+d[1]+'-'+d[0],
+      amount: amt,
+      currency: cur,
+      category: autoCategory(desc)
+    });
   }
   return results;
 }
